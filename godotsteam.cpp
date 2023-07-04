@@ -17,6 +17,9 @@
 // Include GodotSteam header
 #include "godotsteam.h"
 
+// Include c-style apis for problematic APIs in MinGW
+#include "sdk/public/steam/steam_api_flat.h"
+
 // Include some Godot headers
 #include "core/io/ip_address.h"
 #include "core/io/ip.h"
@@ -7866,7 +7869,7 @@ uint64_t Steam::getSteamID(){
 	if(SteamUser() == NULL){
 		return 0;
 	}
-	CSteamID steam_id = SteamUser()->GetSteamID();
+	CSteamID steam_id = SteamAPI_ISteamUser_GetSteamID(SteamUser());
 	return steam_id.ConvertToUint64();
 }
 
