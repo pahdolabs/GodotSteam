@@ -10,6 +10,7 @@
 *.ox
 *.Plo
 *.so
+*.obj
 
 # Python generated
 __pycache__/
