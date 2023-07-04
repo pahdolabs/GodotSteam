@@ -39,4 +39,50 @@ elif env["platform"] == "osx":
 	env.Append(LIBS=["steam_api"])
 	env.Append(LIBPATH=['%s/sdk/redistributable_bin/osx' % module_path])
 
+
+# copy libs
+if env["platform"] == "windows":
+    def copy_libs(target, source, env, executor=None):
+        steam_libs_path = "%s/sdk/redistributable_bin/win64/" % module_path
+        Execute(
+            Mkdir(env["target_path"])
+        )
+        Execute(
+            Copy(
+                env["target_path"] + "steam_api64.dll",
+                steam_libs_path + "steam_api64.dll",
+            )
+        )
+        return 0
+
+    copy_libs("", "", env)
+
+if env["platform"] == "osx":
+    def copy_libs(self, arg, env, executor=None):
+        steam_libs_path = "%s/sdk/redistributable_bin/osx/" % module_path
+        Execute(
+            Mkdir(env["target_path"])
+        )
+        Execute(
+            Copy(
+                env["target_path"] + "libsteam_api.dylib",
+                steam_libs_path + "libsteam_api.dylib"
+            )
+        )
+
+    copy_libs("", "", env)
+
+if env["platform"] == "x11" or env["platform"] == "server":
+    import shutil
+
+    def copy_libs(self, arg, env, executor=None):
+        steam_libs_path = "%s/sdk/redistributable_bin/linux64/" % module_path
+        Execute(
+            Mkdir(env["target_path"])
+        )
+        print("copy libs")
+        shutil.copy2(steam_libs_path + "libsteam_api.so", env["target_path"] + "libsteam_api.so")
+
+    copy_libs("", "", env)
+
 env.add_source_files(env.modules_sources,"*.cpp")
